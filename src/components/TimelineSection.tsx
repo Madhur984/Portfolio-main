@@ -14,6 +14,15 @@ const timelineData = [
   },
   {
     year: '2024',
+    title: 'GDG Noida Member',
+    subtitle: 'Google Developer Groups',
+    description: 'Active member of GDG Noida community, participating in tech talks, workshops, and hackathons focused on Google technologies and AI/ML.',
+    icon: Rocket,
+    type: 'community',
+    emoji: '🌐',
+  },
+  {
+    year: '2024',
     title: 'AI/ML Projects & Research',
     subtitle: 'Deep Learning & Computer Vision',
     description: 'Developed multiple ML projects including plant disease detection, NLP applications, and computer vision systems using TensorFlow and PyTorch.',
@@ -55,6 +64,7 @@ const typeColors = {
   project: 'from-purple-500 to-violet-500',
   work: 'from-blue-500 to-cyan-500',
   education: 'from-green-500 to-emerald-500',
+  community: 'from-red-500 to-pink-500',
 };
 
 function TimelineItem({ item, index }: { item: typeof timelineData[0]; index: number }) {

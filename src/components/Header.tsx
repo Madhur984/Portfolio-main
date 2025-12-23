@@ -71,9 +71,17 @@ export default function Header() {
               e.preventDefault();
               scrollToSection('#home');
             }}
-            className="text-xl font-display font-bold text-foreground hover:text-primary transition-colors"
+            className="flex items-center gap-2 group"
           >
-            Madhur<span className="text-primary">.</span>
+            {/* Custom logo symbol */}
+            <div className="relative w-9 h-9 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg group-hover:shadow-primary/30 transition-shadow">
+              <span className="text-primary-foreground font-display font-bold text-lg">M</span>
+              <div className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-accent rounded-full animate-pulse" />
+            </div>
+            <div className="hidden sm:flex flex-col">
+              <span className="text-xs text-muted-foreground font-mono leading-none">AI/ML</span>
+              <span className="text-sm font-display font-semibold text-foreground leading-tight">Engineer</span>
+            </div>
           </a>
 
           {/* Desktop Navigation */}
