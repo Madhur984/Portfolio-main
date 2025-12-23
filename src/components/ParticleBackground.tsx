@@ -7,8 +7,17 @@ interface Particle {
   vy: number;
   size: number;
   opacity: number;
-  color: string;
+  hex: string;
+  rgb: string;
 }
+
+const colorPalette = [
+  { hex: '#00ffff', rgb: '0, 255, 255' },
+  { hex: '#a855f7', rgb: '168, 85, 247' },
+  { hex: '#f0abfc', rgb: '240, 171, 252' },
+  { hex: '#06b6d4', rgb: '6, 182, 212' },
+  { hex: '#8b5cf6', rgb: '139, 92, 246' },
+];
 
 export default function ParticleBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -31,13 +40,12 @@ export default function ParticleBackground() {
       initParticles();
     };
 
-    const colors = ['#00ffff', '#a855f7', '#f0abfc', '#06b6d4', '#8b5cf6'];
-
     const initParticles = () => {
       particles = [];
       const particleCount = Math.min(150, Math.floor((canvas.width * canvas.height) / 8000));
       
       for (let i = 0; i < particleCount; i++) {
+        const colorChoice = colorPalette[Math.floor(Math.random() * colorPalette.length)];
         particles.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
@@ -45,7 +53,8 @@ export default function ParticleBackground() {
           vy: (Math.random() - 0.5) * 0.5,
           size: Math.random() * 2 + 1,
           opacity: Math.random() * 0.5 + 0.2,
-          color: colors[Math.floor(Math.random() * colors.length)],
+          hex: colorChoice.hex,
+          rgb: colorChoice.rgb,
         });
       }
     };
@@ -98,7 +107,7 @@ export default function ParticleBackground() {
         // Draw particle with glow
         ctx.beginPath();
         ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-        ctx.fillStyle = particle.color;
+        ctx.fillStyle = particle.hex;
         ctx.globalAlpha = particle.opacity;
         ctx.fill();
         
@@ -109,9 +118,9 @@ export default function ParticleBackground() {
           particle.x, particle.y, 0,
           particle.x, particle.y, particle.size * 3
         );
-        gradient.addColorStop(0, particle.color.replace(')', ', 0.3)').replace('rgb', 'rgba').replace('#', 'rgba('));
+        gradient.addColorStop(0, `rgba(${particle.rgb}, 0.3)`);
         gradient.addColorStop(1, 'transparent');
-        ctx.fillStyle = particle.color;
+        ctx.fillStyle = gradient;
         ctx.globalAlpha = particle.opacity * 0.3;
         ctx.fill();
         
