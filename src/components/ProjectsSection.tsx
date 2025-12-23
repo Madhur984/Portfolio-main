@@ -1,23 +1,27 @@
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { ExternalLink, Github, Sparkles } from 'lucide-react';
+import { ExternalLink, Github } from 'lucide-react';
+import plantDiseaseImg from '@/assets/plant-disease-detection.jpg';
+import bharatVisionImg from '@/assets/bharatvision.png';
 
 const projects = [
   {
-    title: 'Plant Disease Detection ML Model',
-    description: 'A CNN-based model to identify leaf diseases. Includes preprocessing, augmentation, training and demo deployment. Built with TensorFlow & Keras.',
-    tags: ['TensorFlow', 'Keras', 'Computer Vision', 'CNN'],
+    title: 'Plant Disease Detection',
+    description: 'A CNN-based deep learning model to identify and classify plant leaf diseases. Features data preprocessing, augmentation, model training, and deployment-ready inference pipeline.',
+    tags: ['TensorFlow', 'Keras', 'CNN', 'Computer Vision'],
     link: 'https://github.com/Madhur984/Plant_Disease_Detection_System',
-    gradient: 'from-green-500 to-emerald-600',
-    icon: '🌿',
+    image: plantDiseaseImg,
+    color: 'from-emerald-500/20 to-green-600/20',
+    borderColor: 'hover:border-emerald-500/30',
   },
   {
-    title: 'BharatVision: Image Recognition',
-    description: 'A computer vision project focused on advanced image recognition and classification tasks, demonstrating proficiency in scalable deep learning architecture.',
-    tags: ['Deep Learning', 'Python', 'Computer Vision', 'PyTorch'],
+    title: 'BharatVision',
+    description: 'An advanced computer vision project focused on image recognition and classification tasks, demonstrating proficiency in scalable deep learning architecture.',
+    tags: ['PyTorch', 'Deep Learning', 'Computer Vision', 'Python'],
     link: 'https://github.com/Madhur984/BharatVision',
-    gradient: 'from-purple-500 to-pink-600',
-    icon: '👁️',
+    image: bharatVisionImg,
+    color: 'from-orange-500/20 to-amber-600/20',
+    borderColor: 'hover:border-orange-500/30',
   },
 ];
 
@@ -31,82 +35,53 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
       href={project.link}
       target="_blank"
       rel="noopener noreferrer"
-      initial={{ opacity: 0, y: 50 }}
+      initial={{ opacity: 0, y: 40 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.6, delay: index * 0.2 }}
-      whileHover={{ y: -10 }}
+      transition={{ duration: 0.6, delay: index * 0.15 }}
+      whileHover={{ y: -8 }}
       className="group block"
     >
-      <div className="cyber-card overflow-hidden relative h-full">
-        {/* Project visual header */}
-        <div className={`relative h-48 bg-gradient-to-br ${project.gradient} p-6 flex items-center justify-center overflow-hidden`}>
-          {/* Animated background pattern */}
-          <div className="absolute inset-0 opacity-20">
-            <div className="absolute inset-0" style={{
-              backgroundImage: `radial-gradient(circle at 2px 2px, white 1px, transparent 0)`,
-              backgroundSize: '24px 24px'
-            }} />
-          </div>
-          
-          {/* Floating icon */}
-          <motion.div
-            animate={{ y: [-5, 5, -5], rotate: [-5, 5, -5] }}
-            transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-            className="text-6xl filter drop-shadow-lg"
-          >
-            {project.icon}
-          </motion.div>
+      <div className={`glass-card overflow-hidden h-full border border-border/30 transition-all duration-300 ${project.borderColor}`}>
+        {/* Project image */}
+        <div className={`relative h-56 overflow-hidden bg-gradient-to-br ${project.color}`}>
+          <img
+            src={project.image}
+            alt={project.title}
+            className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-card via-card/20 to-transparent" />
           
           {/* Hover overlay */}
-          <div className="absolute inset-0 bg-background/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-            <motion.div
-              initial={{ scale: 0 }}
-              whileHover={{ scale: 1.1 }}
-              className="flex items-center gap-2 text-foreground font-semibold"
-            >
+          <div className="absolute inset-0 bg-background/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+            <div className="flex items-center gap-2 text-foreground font-medium">
               <ExternalLink className="w-5 h-5" />
               View Project
-            </motion.div>
+            </div>
           </div>
-          
-          {/* Corner sparkle */}
-          <motion.div
-            animate={{ opacity: [0.5, 1, 0.5], scale: [0.9, 1.1, 0.9] }}
-            transition={{ duration: 2, repeat: Infinity }}
-            className="absolute top-4 right-4 text-white/50"
-          >
-            <Sparkles className="w-6 h-6" />
-          </motion.div>
         </div>
 
         {/* Content */}
         <div className="p-6">
           <div className="flex items-start justify-between gap-4 mb-3">
-            <h3 className="text-xl font-display font-bold text-foreground group-hover:text-primary transition-colors">
+            <h3 className="text-xl font-display font-semibold text-foreground group-hover:text-primary transition-colors">
               {project.title}
             </h3>
             <Github className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0" />
           </div>
           
-          <p className="text-muted-foreground text-sm leading-relaxed mb-4">
+          <p className="text-muted-foreground text-sm leading-relaxed mb-5">
             {project.description}
           </p>
           
           {/* Tags */}
           <div className="flex flex-wrap gap-2">
             {project.tags.map((tag) => (
-              <span
-                key={tag}
-                className="px-3 py-1 rounded-full bg-muted/50 border border-border/50 text-xs font-mono text-muted-foreground group-hover:border-primary/30 group-hover:text-primary/80 transition-colors"
-              >
+              <span key={tag} className="tech-badge text-xs">
                 {tag}
               </span>
             ))}
           </div>
         </div>
-
-        {/* Bottom gradient line */}
-        <div className={`absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r ${project.gradient} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left`} />
       </div>
     </motion.a>
   );
@@ -118,8 +93,7 @@ export default function ProjectsSection() {
 
   return (
     <section id="projects" className="py-24 relative">
-      {/* Background accent */}
-      <div className="absolute top-1/2 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary/20 to-transparent" />
+      <div className="section-divider mb-24" />
       
       <div className="container mx-auto px-6">
         {/* Section header */}
@@ -130,22 +104,16 @@ export default function ProjectsSection() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <motion.span
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={isInView ? { opacity: 1, scale: 1 } : {}}
-            transition={{ delay: 0.2, duration: 0.4 }}
-            className="inline-block px-4 py-1.5 rounded-full bg-secondary/10 border border-secondary/30 text-secondary text-sm font-mono uppercase tracking-wider mb-4"
-          >
+          <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium mb-4">
             Projects
-          </motion.span>
+          </span>
           
-          <h2 className="text-4xl md:text-5xl font-display font-bold text-foreground mb-4">
-            Featured{' '}
-            <span className="gradient-text">Projects</span>
+          <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground mb-4">
+            Featured <span className="gradient-text">Work</span>
           </h2>
           
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Showcasing real-world applications of AI and Machine Learning technologies.
+          <p className="text-muted-foreground max-w-lg mx-auto">
+            Real-world applications of AI and Machine Learning technologies.
           </p>
         </motion.div>
 
@@ -160,19 +128,19 @@ export default function ProjectsSection() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.8, duration: 0.5 }}
+          transition={{ delay: 0.6, duration: 0.5 }}
           className="mt-12 text-center"
         >
           <motion.a
             href="https://github.com/Madhur984"
             target="_blank"
             rel="noopener noreferrer"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="btn-outline-cyber inline-flex items-center gap-2"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="btn-outline inline-flex items-center gap-2"
           >
             <Github className="w-5 h-5" />
-            View All Projects on GitHub
+            View All on GitHub
           </motion.a>
         </motion.div>
       </div>
