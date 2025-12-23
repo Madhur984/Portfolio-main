@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { Brain, Database, BarChart3, Cloud, Sparkles, Code2, Cpu, Zap } from 'lucide-react';
+import { Brain, Database, BarChart3, Cloud, Zap, Cpu } from 'lucide-react';
 
 const skillCategories = [
   {
@@ -34,51 +34,58 @@ const skillCategories = [
 ];
 
 const allSkills = [
-  { name: 'Python', level: 95, emoji: '🐍' },
-  { name: 'TensorFlow', level: 88, emoji: '🧠' },
-  { name: 'PyTorch', level: 85, emoji: '🔥' },
-  { name: 'NLP', level: 82, emoji: '💬' },
-  { name: 'Computer Vision', level: 80, emoji: '👁️' },
-  { name: 'Deep Learning', level: 90, emoji: '🤖' },
-  { name: 'Data Analysis', level: 92, emoji: '📊' },
-  { name: 'Git', level: 88, emoji: '📝' },
+  { name: 'Python', emoji: '🐍' },
+  { name: 'TensorFlow', emoji: '🧠' },
+  { name: 'PyTorch', emoji: '🔥' },
+  { name: 'NLP', emoji: '💬' },
+  { name: 'Computer Vision', emoji: '👁️' },
+  { name: 'Deep Learning', emoji: '🤖' },
+  { name: 'Data Analysis', emoji: '📊' },
+  { name: 'Git', emoji: '📝' },
+  { name: 'OpenCV', emoji: '📷' },
+  { name: 'Hugging Face', emoji: '🤗' },
+  { name: 'LangChain', emoji: '🔗' },
+  { name: 'Streamlit', emoji: '🎈' },
 ];
 
-function SkillBar({ skill, index, isInView }: { skill: typeof allSkills[0]; index: number; isInView: boolean }) {
+function SkillBox({ skill, index, isInView }: { skill: typeof allSkills[0]; index: number; isInView: boolean }) {
   const [isHovered, setIsHovered] = useState(false);
   
   return (
     <motion.div
-      initial={{ opacity: 0, x: -20 }}
-      animate={isInView ? { opacity: 1, x: 0 } : {}}
-      transition={{ duration: 0.5, delay: 0.1 * index }}
+      initial={{ opacity: 0, scale: 0.8, y: 20 }}
+      animate={isInView ? { opacity: 1, scale: 1, y: 0 } : {}}
+      transition={{ duration: 0.4, delay: 0.05 * index, type: 'spring', stiffness: 100 }}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
-      className="group"
+      whileHover={{ 
+        y: -8, 
+        scale: 1.05,
+        transition: { duration: 0.2 }
+      }}
+      whileTap={{ scale: 0.95 }}
+      className="relative group cursor-default"
     >
-      <div className="flex items-center justify-between mb-2">
-        <div className="flex items-center gap-2">
-          <motion.span 
-            className="text-lg"
-            animate={isHovered ? { scale: 1.3, rotate: [0, 10, -10, 0] } : {}}
-          >
-            {skill.emoji}
-          </motion.span>
-          <span className="text-sm font-medium text-foreground">{skill.name}</span>
-        </div>
+      <div className="glass-card p-4 flex flex-col items-center gap-2 border border-border/50 hover:border-primary/50 transition-colors duration-300">
         <motion.span 
-          className="text-xs font-mono text-muted-foreground"
-          animate={isHovered ? { scale: 1.1 } : {}}
+          className="text-3xl"
+          animate={isHovered ? { 
+            scale: 1.3, 
+            rotate: [0, -10, 10, 0],
+            y: -5
+          } : {}}
+          transition={{ duration: 0.3 }}
         >
-          {skill.level}%
+          {skill.emoji}
         </motion.span>
-      </div>
-      <div className="h-2 bg-muted rounded-full overflow-hidden">
+        <span className="text-sm font-medium text-foreground text-center">
+          {skill.name}
+        </span>
+        
+        {/* Glow effect on hover */}
         <motion.div
-          className="h-full bg-gradient-to-r from-primary to-secondary rounded-full"
-          initial={{ width: 0 }}
-          animate={isInView ? { width: `${skill.level}%` } : {}}
-          transition={{ duration: 1, delay: 0.2 + 0.1 * index, ease: 'easeOut' }}
+          className="absolute inset-0 rounded-xl bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 blur-xl"
+          animate={isHovered ? { scale: 1.2 } : { scale: 1 }}
         />
       </div>
     </motion.div>
@@ -209,24 +216,24 @@ export default function SkillsSection() {
           ))}
         </div>
 
-        {/* Skill bars section */}
+        {/* Skills boxes section */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.5 }}
-          className="max-w-2xl mx-auto"
+          className="max-w-4xl mx-auto"
         >
           <div className="text-center mb-8">
             <p className="text-sm text-muted-foreground font-mono uppercase tracking-wider flex items-center justify-center gap-2">
-              <Code2 className="w-4 h-4" />
-              Proficiency levels
-              <span className="text-lg">📈</span>
+              <Cpu className="w-4 h-4" />
+              Core technologies
+              <span className="text-lg">🛠️</span>
             </p>
           </div>
           
-          <div className="glass-card p-6 space-y-5">
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4">
             {allSkills.map((skill, i) => (
-              <SkillBar key={skill.name} skill={skill} index={i} isInView={isInView} />
+              <SkillBox key={skill.name} skill={skill} index={i} isInView={isInView} />
             ))}
           </div>
         </motion.div>
