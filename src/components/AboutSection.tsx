@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { Code2, Brain, Cpu, Database } from 'lucide-react';
 
@@ -12,76 +12,84 @@ function TypewriterText() {
   const [displayedLines, setDisplayedLines] = useState<string[]>(['', '', '']);
   const [currentLine, setCurrentLine] = useState(0);
   const [currentChar, setCurrentChar] = useState(0);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
+  const [phase, setPhase] = useState<'typing' | 'paused' | 'deleting'>('typing');
   const ref = useRef(null);
   const isInView = useInView(ref, { once: false, margin: '-100px' });
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const resetState = useCallback(() => {
+    setDisplayedLines(['', '', '']);
+    setCurrentLine(0);
+    setCurrentChar(0);
+    setPhase('typing');
+  }, []);
 
   useEffect(() => {
     if (!isInView) {
-      setDisplayedLines(['', '', '']);
-      setCurrentLine(0);
-      setCurrentChar(0);
-      setIsDeleting(false);
-      setIsPaused(false);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      resetState();
       return;
     }
 
-    const typeSpeed = 50;
-    const deleteSpeed = 30;
-    const pauseDuration = 2000;
+    const typeSpeed = 60;
+    const deleteSpeed = 40;
+    const pauseDuration = 2500;
 
-    const timeout = setTimeout(() => {
-      if (isPaused) {
-        setIsPaused(false);
-        setIsDeleting(true);
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+
+    timeoutRef.current = setTimeout(() => {
+      if (phase === 'paused') {
+        setPhase('deleting');
         return;
       }
 
-      if (!isDeleting) {
-        // Typing
-        if (currentChar < typewriterLines[currentLine].text.length) {
+      if (phase === 'typing') {
+        const targetText = typewriterLines[currentLine].text;
+        
+        if (currentChar < targetText.length) {
           setDisplayedLines(prev => {
             const newLines = [...prev];
-            newLines[currentLine] = typewriterLines[currentLine].text.slice(0, currentChar + 1);
+            newLines[currentLine] = targetText.slice(0, currentChar + 1);
             return newLines;
           });
-          setCurrentChar(currentChar + 1);
+          setCurrentChar(c => c + 1);
         } else if (currentLine < typewriterLines.length - 1) {
-          setCurrentLine(currentLine + 1);
+          setCurrentLine(l => l + 1);
           setCurrentChar(0);
         } else {
-          setIsPaused(true);
-        }
-      } else {
-        // Deleting
-        if (currentLine >= 0) {
-          if (displayedLines[currentLine].length > 0) {
-            setDisplayedLines(prev => {
-              const newLines = [...prev];
-              newLines[currentLine] = newLines[currentLine].slice(0, -1);
-              return newLines;
-            });
-          } else if (currentLine > 0) {
-            setCurrentLine(currentLine - 1);
-          } else {
-            setIsDeleting(false);
-            setCurrentLine(0);
-            setCurrentChar(0);
-          }
+          setPhase('paused');
         }
       }
-    }, isPaused ? pauseDuration : (isDeleting ? deleteSpeed : typeSpeed));
 
-    return () => clearTimeout(timeout);
-  }, [currentChar, currentLine, isDeleting, isPaused, isInView, displayedLines]);
+      if (phase === 'deleting') {
+        const currentText = displayedLines[currentLine];
+        
+        if (currentText.length > 0) {
+          setDisplayedLines(prev => {
+            const newLines = [...prev];
+            newLines[currentLine] = newLines[currentLine].slice(0, -1);
+            return newLines;
+          });
+        } else if (currentLine > 0) {
+          setCurrentLine(l => l - 1);
+        } else {
+          setPhase('typing');
+          setCurrentChar(0);
+        }
+      }
+    }, phase === 'paused' ? pauseDuration : (phase === 'deleting' ? deleteSpeed : typeSpeed));
+
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, [isInView, currentChar, currentLine, phase, displayedLines, resetState]);
 
   return (
     <div ref={ref} className="space-y-2">
       {typewriterLines.map((line, index) => (
         <h2 key={index} className={`text-4xl md:text-5xl font-display font-bold ${line.className}`}>
           {displayedLines[index]}
-          {currentLine === index && !isPaused && (
+          {currentLine === index && phase !== 'paused' && isInView && (
             <span className="inline-block w-1 h-10 bg-primary ml-1 animate-pulse" />
           )}
         </h2>

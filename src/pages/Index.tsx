@@ -1,5 +1,3 @@
-import { Suspense, lazy } from 'react';
-import { motion } from 'framer-motion';
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
 import AboutSection from '@/components/AboutSection';
@@ -9,9 +7,8 @@ import ContactSection from '@/components/ContactSection';
 import Footer from '@/components/Footer';
 import BackToTop from '@/components/BackToTop';
 import CustomCursor from '@/components/CustomCursor';
-
-// Lazy load the heavy 3D background
-const ParticleBackground = lazy(() => import('@/components/ParticleBackground'));
+import ParticleBackground from '@/components/ParticleBackground';
+import { motion } from 'framer-motion';
 
 const Index = () => {
   return (
@@ -19,12 +16,8 @@ const Index = () => {
       {/* Custom cursor */}
       <CustomCursor />
       
-      {/* 3D Particle Background */}
-      <Suspense fallback={
-        <div className="fixed inset-0 -z-10 bg-background" />
-      }>
-        <ParticleBackground />
-      </Suspense>
+      {/* Particle Background */}
+      <ParticleBackground />
 
       {/* Scanline overlay effect */}
       <div className="fixed inset-0 pointer-events-none z-50 opacity-[0.02]">
