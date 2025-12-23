@@ -7,9 +7,8 @@ import ContactSection from '@/components/ContactSection';
 import Footer from '@/components/Footer';
 import BackToTop from '@/components/BackToTop';
 import CustomCursor from '@/components/CustomCursor';
-import ParticleBackground from '@/components/ParticleBackground';
+import CodeBackground from '@/components/CodeBackground';
 import ScrollProgress from '@/components/ScrollProgress';
-import FloatingElements from '@/components/FloatingElements';
 import { motion } from 'framer-motion';
 
 const Index = () => {
@@ -21,11 +20,8 @@ const Index = () => {
       {/* Scroll progress indicator */}
       <ScrollProgress />
       
-      {/* Particle Background */}
-      <ParticleBackground />
-      
-      {/* Floating geometric elements */}
-      <FloatingElements />
+      {/* Code Background */}
+      <CodeBackground />
 
       {/* Header */}
       <Header />
