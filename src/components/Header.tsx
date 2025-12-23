@@ -1,35 +1,31 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Github, Linkedin, Instagram, Download, Sparkles } from 'lucide-react';
-import MagneticButton from './MagneticButton';
+import { Menu, X, Github, Linkedin, Mail } from 'lucide-react';
 
-const navLinks = [
-  { href: '#home', label: 'Home' },
-  { href: '#about', label: 'About' },
-  { href: '#skills', label: 'Skills' },
-  { href: '#projects', label: 'Projects' },
-  { href: '#contact', label: 'Contact' },
+const navItems = [
+  { name: 'Home', href: '#home' },
+  { name: 'About', href: '#about' },
+  { name: 'Projects', href: '#projects' },
+  { name: 'Skills', href: '#skills' },
+  { name: 'Contact', href: '#contact' },
 ];
 
 const socialLinks = [
-  { href: 'https://www.instagram.com/madhur_g24', icon: Instagram, label: 'Instagram' },
-  { href: 'https://www.linkedin.com/in/madhur-garg-5419b4244', icon: Linkedin, label: 'LinkedIn' },
-  { href: 'https://github.com/Madhur984', icon: Github, label: 'GitHub' },
+  { icon: Github, href: 'https://github.com/Madhur984', label: 'GitHub' },
+  { icon: Linkedin, href: 'https://www.linkedin.com/in/madhur-garg-5419b4244', label: 'LinkedIn' },
+  { icon: Mail, href: 'mailto:gmadhur908@gmail.com', label: 'Email' },
 ];
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
-      
-      // Update active section
-      const sections = navLinks.map(link => link.href.slice(1));
+
+      const sections = navItems.map(item => item.href.slice(1));
       for (const section of sections.reverse()) {
         const element = document.getElementById(section);
         if (element) {
@@ -47,211 +43,131 @@ export default function Header() {
   }, []);
 
   const scrollToSection = (href: string) => {
-    const element = document.querySelector(href);
+    const element = document.getElementById(href.slice(1));
     if (element) {
-      const headerHeight = 80;
-      const top = element.getBoundingClientRect().top + window.scrollY - headerHeight;
-      window.scrollTo({ top, behavior: 'smooth' });
+      element.scrollIntoView({ behavior: 'smooth' });
     }
-    setMobileMenuOpen(false);
+    setIsMenuOpen(false);
   };
 
   return (
-    <>
-      <motion.header
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          isScrolled
-            ? 'py-3 bg-background/80 backdrop-blur-xl border-b border-border/50'
-            : 'py-5 bg-transparent'
-        }`}
-      >
-        <div className="container mx-auto px-6">
-          <div className="flex items-center justify-between">
-            {/* Logo */}
-            <MagneticButton onClick={() => scrollToSection('#home')}>
-              <div className="flex items-center gap-3 cursor-pointer" data-cursor-text="Home">
-                <div className="relative w-11 h-11 rounded-xl bg-gradient-to-br from-primary via-tech-blue to-secondary p-[2px] overflow-hidden group">
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary via-tech-blue to-secondary animate-gradient-x" />
-                  <div className="relative w-full h-full rounded-[10px] bg-background flex items-center justify-center">
-                    <Sparkles className="w-5 h-5 text-primary group-hover:text-secondary transition-colors" />
-                  </div>
-                </div>
-                <div className="hidden sm:block">
-                  <div className="font-display font-bold text-foreground text-lg leading-none">
-                    Madhur Garg
-                  </div>
-                  <div className="text-xs text-muted-foreground font-mono">
-                    AI & ML Engineer
-                  </div>
-                </div>
-              </div>
-            </MagneticButton>
+    <motion.header
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.5 }}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        isScrolled
+          ? 'bg-background/80 backdrop-blur-lg border-b border-border/50'
+          : 'bg-transparent'
+      }`}
+    >
+      <div className="container mx-auto px-6">
+        <div className="flex items-center justify-between h-16">
+          {/* Logo */}
+          <a
+            href="#home"
+            onClick={(e) => {
+              e.preventDefault();
+              scrollToSection('#home');
+            }}
+            className="text-xl font-display font-bold text-foreground hover:text-primary transition-colors"
+          >
+            Madhur<span className="text-primary">.</span>
+          </a>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center gap-1">
-              {navLinks.map((link) => (
-                <MagneticButton key={link.href} onClick={() => scrollToSection(link.href)}>
-                  <span
-                    className={`nav-link-cyber px-4 py-2 rounded-lg font-medium text-sm transition-all cursor-pointer ${
-                      activeSection === link.href.slice(1)
-                        ? 'text-primary bg-primary/5'
-                        : 'text-muted-foreground hover:text-foreground'
-                    }`}
-                  >
-                    {link.label}
-                  </span>
-                </MagneticButton>
-              ))}
-            </nav>
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center gap-8">
+            {navItems.map((item) => (
+              <a
+                key={item.name}
+                href={item.href}
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToSection(item.href);
+                }}
+                className={`nav-link text-sm font-medium ${
+                  activeSection === item.href.slice(1) ? 'active' : ''
+                }`}
+              >
+                {item.name}
+              </a>
+            ))}
+          </nav>
 
-            {/* Desktop Actions */}
-            <div className="hidden lg:flex items-center gap-3">
-              {socialLinks.map((link) => (
-                <MagneticButton
-                  key={link.label}
-                  href={link.href}
-                  target="_blank"
-                >
-                  <span className="btn-icon" data-cursor-text={link.label}>
-                    <link.icon className="w-4 h-4" />
-                  </span>
-                </MagneticButton>
-              ))}
-              
-              <div className="w-px h-6 bg-border mx-2" />
-              
-              <MagneticButton>
-                <span className="btn-cyber py-2.5 px-5 text-sm" data-cursor-text="Download">
-                  <span className="flex items-center gap-2">
-                    <Download className="w-4 h-4" />
-                    Resume
-                  </span>
-                </span>
-              </MagneticButton>
-            </div>
-
-            {/* Mobile Menu Button */}
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden relative w-10 h-10 flex items-center justify-center rounded-lg bg-muted/50 border border-border"
-              aria-label="Toggle menu"
-            >
-              <AnimatePresence mode="wait">
-                {mobileMenuOpen ? (
-                  <motion.div
-                    key="close"
-                    initial={{ opacity: 0, rotate: -90 }}
-                    animate={{ opacity: 1, rotate: 0 }}
-                    exit={{ opacity: 0, rotate: 90 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <X className="w-5 h-5" />
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="menu"
-                    initial={{ opacity: 0, rotate: 90 }}
-                    animate={{ opacity: 1, rotate: 0 }}
-                    exit={{ opacity: 0, rotate: -90 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <Menu className="w-5 h-5" />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.button>
+          {/* Social Links - Desktop */}
+          <div className="hidden md:flex items-center gap-2">
+            {socialLinks.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-9 h-9 rounded-lg flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/5 transition-all"
+                aria-label={link.label}
+              >
+                <link.icon className="w-4 h-4" />
+              </a>
+            ))}
           </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="md:hidden w-10 h-10 flex items-center justify-center text-foreground"
+          >
+            {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
         </div>
-      </motion.header>
+      </div>
 
       {/* Mobile Menu */}
       <AnimatePresence>
-        {mobileMenuOpen && (
+        {isMenuOpen && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-40 lg:hidden"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden bg-background/95 backdrop-blur-lg border-b border-border"
           >
-            {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-background/80 backdrop-blur-xl"
-              onClick={() => setMobileMenuOpen(false)}
-            />
-
-            {/* Menu content */}
-            <motion.div
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="absolute right-0 top-0 bottom-0 w-80 bg-card border-l border-border p-6 pt-24"
-            >
-              <nav className="flex flex-col gap-2">
-                {navLinks.map((link, index) => (
-                  <motion.button
-                    key={link.href}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    onClick={() => scrollToSection(link.href)}
-                    className={`text-left py-3 px-4 rounded-xl font-medium text-lg transition-all ${
-                      activeSection === link.href.slice(1)
-                        ? 'text-primary bg-primary/10'
-                        : 'text-foreground hover:bg-muted'
+            <nav className="container mx-auto px-6 py-4">
+              <div className="flex flex-col gap-2">
+                {navItems.map((item) => (
+                  <a
+                    key={item.name}
+                    href={item.href}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      scrollToSection(item.href);
+                    }}
+                    className={`py-2 text-base font-medium transition-colors ${
+                      activeSection === item.href.slice(1)
+                        ? 'text-primary'
+                        : 'text-muted-foreground hover:text-foreground'
                     }`}
                   >
-                    {link.label}
-                  </motion.button>
+                    {item.name}
+                  </a>
                 ))}
-              </nav>
-
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
-                className="mt-8 pt-8 border-t border-border"
-              >
-                <p className="text-sm text-muted-foreground mb-4 font-mono">Connect</p>
-                <div className="flex gap-3">
-                  {socialLinks.map((link) => (
-                    <a
-                      key={link.label}
-                      href={link.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn-icon"
-                    >
-                      <link.icon className="w-5 h-5" />
-                    </a>
-                  ))}
-                </div>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.6 }}
-                className="mt-6"
-              >
-                <button className="btn-cyber w-full py-3">
-                  <span className="flex items-center justify-center gap-2">
-                    <Download className="w-4 h-4" />
-                    Download Resume
-                  </span>
-                </button>
-              </motion.div>
-            </motion.div>
+              </div>
+              
+              <div className="flex items-center gap-4 mt-4 pt-4 border-t border-border">
+                {socialLinks.map((link) => (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-muted-foreground hover:text-primary transition-colors"
+                    aria-label={link.label}
+                  >
+                    <link.icon className="w-5 h-5" />
+                  </a>
+                ))}
+              </div>
+            </nav>
           </motion.div>
         )}
       </AnimatePresence>
-    </>
+    </motion.header>
   );
 }
