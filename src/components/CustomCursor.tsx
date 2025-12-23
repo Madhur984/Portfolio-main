@@ -55,7 +55,7 @@ export default function CustomCursor() {
     <>
       {/* Main cursor dot */}
       <motion.div
-        className="fixed top-0 left-0 pointer-events-none z-[9999] mix-blend-difference hidden md:block"
+        className="fixed top-0 left-0 pointer-events-none z-[9999] hidden md:block"
         animate={{
           x: mousePosition.x - 5,
           y: mousePosition.y - 5,
@@ -69,7 +69,7 @@ export default function CustomCursor() {
           mass: 0.5,
         }}
       >
-        <div className="w-2.5 h-2.5 rounded-full bg-white" />
+        <div className="w-2.5 h-2.5 rounded-full bg-primary" />
       </motion.div>
 
       {/* Outer ring */}
@@ -79,7 +79,7 @@ export default function CustomCursor() {
           x: mousePosition.x - 20,
           y: mousePosition.y - 20,
           scale: isHovering ? 1.3 : 1,
-          opacity: isVisible ? 0.4 : 0,
+          opacity: isVisible ? 0.5 : 0,
         }}
         transition={{
           type: 'spring',
@@ -88,7 +88,7 @@ export default function CustomCursor() {
           mass: 0.8,
         }}
       >
-        <div className="w-10 h-10 rounded-full border border-primary/50" />
+        <div className="w-10 h-10 rounded-full border-2 border-primary/40" />
       </motion.div>
     </>
   );
