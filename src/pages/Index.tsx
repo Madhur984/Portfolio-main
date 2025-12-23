@@ -8,6 +8,8 @@ import Footer from '@/components/Footer';
 import BackToTop from '@/components/BackToTop';
 import CustomCursor from '@/components/CustomCursor';
 import ParticleBackground from '@/components/ParticleBackground';
+import ScrollProgress from '@/components/ScrollProgress';
+import FloatingElements from '@/components/FloatingElements';
 import { motion } from 'framer-motion';
 
 const Index = () => {
@@ -16,21 +18,14 @@ const Index = () => {
       {/* Custom cursor */}
       <CustomCursor />
       
+      {/* Scroll progress indicator */}
+      <ScrollProgress />
+      
       {/* Particle Background */}
       <ParticleBackground />
-
-      {/* Scanline overlay effect */}
-      <div className="fixed inset-0 pointer-events-none z-50 opacity-[0.02]">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `repeating-linear-gradient(
-            0deg,
-            transparent,
-            transparent 2px,
-            hsl(var(--primary) / 0.03) 2px,
-            hsl(var(--primary) / 0.03) 4px
-          )`
-        }} />
-      </div>
+      
+      {/* Floating geometric elements */}
+      <FloatingElements />
 
       {/* Header */}
       <Header />
