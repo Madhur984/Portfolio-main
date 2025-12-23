@@ -7,17 +7,7 @@ interface Particle {
   vy: number;
   size: number;
   opacity: number;
-  hex: string;
-  rgb: string;
 }
-
-const colorPalette = [
-  { hex: '#00ffff', rgb: '0, 255, 255' },
-  { hex: '#a855f7', rgb: '168, 85, 247' },
-  { hex: '#f0abfc', rgb: '240, 171, 252' },
-  { hex: '#06b6d4', rgb: '6, 182, 212' },
-  { hex: '#8b5cf6', rgb: '139, 92, 246' },
-];
 
 export default function ParticleBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -42,19 +32,16 @@ export default function ParticleBackground() {
 
     const initParticles = () => {
       particles = [];
-      const particleCount = Math.min(150, Math.floor((canvas.width * canvas.height) / 8000));
+      const particleCount = Math.min(80, Math.floor((canvas.width * canvas.height) / 15000));
       
       for (let i = 0; i < particleCount; i++) {
-        const colorChoice = colorPalette[Math.floor(Math.random() * colorPalette.length)];
         particles.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          vx: (Math.random() - 0.5) * 0.5,
-          vy: (Math.random() - 0.5) * 0.5,
-          size: Math.random() * 2 + 1,
-          opacity: Math.random() * 0.5 + 0.2,
-          hex: colorChoice.hex,
-          rgb: colorChoice.rgb,
+          vx: (Math.random() - 0.5) * 0.3,
+          vy: (Math.random() - 0.5) * 0.3,
+          size: Math.random() * 1.5 + 0.5,
+          opacity: Math.random() * 0.3 + 0.1,
         });
       }
     };
@@ -64,10 +51,10 @@ export default function ParticleBackground() {
       mouseY = e.clientY;
     };
 
-    const drawConnections = (p1: Particle, p2: Particle, distance: number) => {
-      const opacity = (1 - distance / 150) * 0.3;
+    const drawConnection = (p1: Particle, p2: Particle, distance: number) => {
+      const opacity = (1 - distance / 200) * 0.15;
       ctx.beginPath();
-      ctx.strokeStyle = `rgba(0, 255, 255, ${opacity})`;
+      ctx.strokeStyle = `rgba(74, 158, 199, ${opacity})`;
       ctx.lineWidth = 0.5;
       ctx.moveTo(p1.x, p1.y);
       ctx.lineTo(p2.x, p2.y);
@@ -75,56 +62,40 @@ export default function ParticleBackground() {
     };
 
     const animate = () => {
-      ctx.fillStyle = 'rgba(7, 6, 15, 0.1)';
+      ctx.fillStyle = 'rgba(12, 14, 18, 0.15)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       particles.forEach((particle, i) => {
-        // Mouse interaction
+        // Subtle mouse interaction
         const dx = mouseX - particle.x;
         const dy = mouseY - particle.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
         
-        if (dist < 150) {
-          const force = (150 - dist) / 150;
-          particle.vx -= (dx / dist) * force * 0.02;
-          particle.vy -= (dy / dist) * force * 0.02;
+        if (dist < 200) {
+          const force = (200 - dist) / 200;
+          particle.vx -= (dx / dist) * force * 0.008;
+          particle.vy -= (dy / dist) * force * 0.008;
         }
 
         // Update position
         particle.x += particle.vx;
         particle.y += particle.vy;
 
-        // Boundary check with wrap
+        // Boundary wrap
         if (particle.x < 0) particle.x = canvas.width;
         if (particle.x > canvas.width) particle.x = 0;
         if (particle.y < 0) particle.y = canvas.height;
         if (particle.y > canvas.height) particle.y = 0;
 
         // Friction
-        particle.vx *= 0.99;
-        particle.vy *= 0.99;
+        particle.vx *= 0.995;
+        particle.vy *= 0.995;
 
-        // Draw particle with glow
+        // Draw particle
         ctx.beginPath();
         ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-        ctx.fillStyle = particle.hex;
-        ctx.globalAlpha = particle.opacity;
+        ctx.fillStyle = `rgba(74, 158, 199, ${particle.opacity})`;
         ctx.fill();
-        
-        // Glow effect
-        ctx.beginPath();
-        ctx.arc(particle.x, particle.y, particle.size * 3, 0, Math.PI * 2);
-        const gradient = ctx.createRadialGradient(
-          particle.x, particle.y, 0,
-          particle.x, particle.y, particle.size * 3
-        );
-        gradient.addColorStop(0, `rgba(${particle.rgb}, 0.3)`);
-        gradient.addColorStop(1, 'transparent');
-        ctx.fillStyle = gradient;
-        ctx.globalAlpha = particle.opacity * 0.3;
-        ctx.fill();
-        
-        ctx.globalAlpha = 1;
 
         // Draw connections
         for (let j = i + 1; j < particles.length; j++) {
@@ -132,50 +103,28 @@ export default function ParticleBackground() {
           const distance = Math.sqrt(
             Math.pow(particle.x - p2.x, 2) + Math.pow(particle.y - p2.y, 2)
           );
-          if (distance < 150) {
-            drawConnections(particle, p2, distance);
+          if (distance < 200) {
+            drawConnection(particle, p2, distance);
           }
         }
       });
 
-      // Draw floating geometric shapes
-      const time = Date.now() * 0.001;
-      
-      // Floating hexagon
-      ctx.save();
-      ctx.translate(canvas.width * 0.2, canvas.height * 0.3 + Math.sin(time * 0.5) * 30);
-      ctx.rotate(time * 0.2);
-      ctx.strokeStyle = 'rgba(0, 255, 255, 0.1)';
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      for (let i = 0; i < 6; i++) {
-        const angle = (i / 6) * Math.PI * 2;
-        const x = Math.cos(angle) * 80;
-        const y = Math.sin(angle) * 80;
-        if (i === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
+      // Subtle grid pattern
+      ctx.strokeStyle = 'rgba(74, 158, 199, 0.02)';
+      ctx.lineWidth = 0.5;
+      const gridSize = 100;
+      for (let x = 0; x < canvas.width; x += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, canvas.height);
+        ctx.stroke();
       }
-      ctx.closePath();
-      ctx.stroke();
-      ctx.restore();
-
-      // Floating triangle
-      ctx.save();
-      ctx.translate(canvas.width * 0.8, canvas.height * 0.7 + Math.cos(time * 0.4) * 25);
-      ctx.rotate(-time * 0.15);
-      ctx.strokeStyle = 'rgba(168, 85, 247, 0.1)';
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      for (let i = 0; i < 3; i++) {
-        const angle = (i / 3) * Math.PI * 2 - Math.PI / 2;
-        const x = Math.cos(angle) * 60;
-        const y = Math.sin(angle) * 60;
-        if (i === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
+      for (let y = 0; y < canvas.height; y += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(canvas.width, y);
+        ctx.stroke();
       }
-      ctx.closePath();
-      ctx.stroke();
-      ctx.restore();
 
       animationId = requestAnimationFrame(animate);
     };
@@ -197,11 +146,12 @@ export default function ParticleBackground() {
       <canvas
         ref={canvasRef}
         className="w-full h-full"
-        style={{ background: 'radial-gradient(ellipse at center, #0f0a1a 0%, #07060f 100%)' }}
+        style={{ background: 'linear-gradient(135deg, #0c0e12 0%, #121620 50%, #0c0e12 100%)' }}
       />
-      {/* Gradient overlays */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background/80 pointer-events-none" />
-      <div className="absolute inset-0 bg-gradient-radial from-primary/5 via-transparent to-transparent pointer-events-none" />
+      {/* Subtle gradient overlays */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background/50 pointer-events-none" />
+      <div className="absolute top-0 left-0 w-1/2 h-1/2 bg-gradient-radial from-primary/3 via-transparent to-transparent pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-gradient-radial from-secondary/3 via-transparent to-transparent pointer-events-none" />
     </div>
   );
 }
