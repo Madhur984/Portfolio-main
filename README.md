@@ -13,7 +13,7 @@
       --text: #e5e7eb;
       --muted: #94a3b8;
       --accent: #3b82f6;
-      --accent-soft: rgba(59, 130, 246, 0.25);
+      --accent-soft: rgba(59,130,246,.25);
     }
 
     * {
@@ -24,133 +24,198 @@
     }
 
     body {
-      background: radial-gradient(circle at top, #020617, #000);
+      background:
+        radial-gradient(800px 400px at top, rgba(59,130,246,.12), transparent),
+        #020617;
       color: var(--text);
       line-height: 1.7;
     }
 
     .container {
-      max-width: 920px;
+      max-width: 960px;
       margin: auto;
-      padding: 60px 24px;
+      padding: 80px 24px;
     }
 
-    /* HEADER */
+    /* HERO */
     header {
       text-align: center;
-      margin-bottom: 80px;
+      margin-bottom: 100px;
+      animation: fadeUp 0.8s ease forwards;
     }
 
     header h1 {
-      font-size: 3.2rem;
-      font-weight: 800;
+      font-size: 3.4rem;
+      font-weight: 900;
       letter-spacing: -1px;
-      margin-bottom: 12px;
       background: linear-gradient(90deg, #60a5fa, #2563eb);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
+    .underline {
+      width: 120px;
+      height: 4px;
+      background: linear-gradient(90deg, #60a5fa, #2563eb);
+      margin: 16px auto 24px;
+      border-radius: 999px;
+    }
+
     header p {
       color: var(--muted);
       font-size: 1.15rem;
+      margin-bottom: 28px;
+    }
+
+    .badges {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      padding: 8px 14px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: 0.9rem;
+      color: #c7d2fe;
+      background: rgba(255,255,255,0.02);
+    }
+
+    .cta {
+      display: inline-block;
+      margin-top: 40px;
+      padding: 12px 26px;
+      border-radius: 999px;
+      background: var(--accent);
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(59,130,246,.35);
     }
 
     /* SECTIONS */
     section {
-      margin-bottom: 60px;
-      padding: 28px;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0));
-      transition: all 0.3s ease;
-    }
-
-    section:hover {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 1px var(--accent-soft);
-      transform: translateY(-2px);
+      margin-bottom: 70px;
+      animation: fadeUp 0.8s ease forwards;
     }
 
     section h2 {
-      font-size: 1.7rem;
-      margin-bottom: 12px;
+      font-size: 1.9rem;
+      margin-bottom: 24px;
       color: #bfdbfe;
-      border-bottom: none;
     }
 
-    section p {
-      margin-top: 14px;
+    .card {
+      padding: 28px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: linear-gradient(
+        180deg,
+        rgba(255,255,255,0.03),
+        rgba(255,255,255,0)
+      );
+      transition: transform .3s ease, border-color .3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+    }
+
+    .card p {
       color: #c7d2fe;
+      margin-bottom: 16px;
     }
 
-    /* LIST */
-    ul {
-      margin-top: 16px;
-      padding-left: 18px;
+    /* INTEREST GRID */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
     }
 
-    ul li {
-      margin-bottom: 10px;
-      color: #cbd5f5;
+    .interest {
+      padding: 18px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+      text-align: center;
+      transition: all .25s ease;
     }
 
-    ul li::marker {
-      color: var(--accent);
+    .interest:hover {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent-soft);
     }
 
-    /* FOOTER */
     footer {
       text-align: center;
-      margin-top: 80px;
+      margin-top: 120px;
       color: var(--muted);
       font-size: 0.9rem;
-      opacity: 0.8;
+      opacity: .8;
     }
 
-    /* RESPONSIVE */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     @media (max-width: 640px) {
-      header h1 {
-        font-size: 2.4rem;
-      }
-      section {
-        padding: 22px;
-      }
+      header h1 { font-size: 2.6rem; }
     }
   </style>
 </head>
 
 <body>
   <div class="container">
-
     <header>
       <h1>Madhur Garg</h1>
-      <p>Engineering Student | Developer | Tech Enthusiast</p>
+      <div class="underline"></div>
+      <p>Engineering Student • Developer • Tech Enthusiast</p>
+
+       <div class="badges">
+        <span class="badge">Web Development</span>
+        <span class="badge">AI / ML</span>
+        <span class="badge">Hackathons</span>
+        <span class="badge">Problem Solving</span>
+      </div>
+
+      <a href="#about" class="cta">Explore My Work</a>
     </header>
 
-    <section>
+    <section id="about">
       <h2>About Me</h2>
-      <p>
-        I am an engineering student with a strong interest in software development
-        and problem solving. I enjoy building applications that solve real-world
-        problems and help people in practical ways.
-      </p>
-      <p>
-        I actively participate in hackathons and technical competitions, where I
-        focus on converting ideas into working products. I believe in learning by
-        building and continuously improving my skills through hands-on projects.
-      </p>
+      <div class="card">
+        <p>
+          I am an engineering student with a strong interest in software
+          development and problem solving. I enjoy building applications that
+          solve real-world problems and deliver practical value.
+        </p>
+        <p>
+          I actively participate in hackathons and technical competitions, where
+          I focus on converting ideas into working products. I strongly believe
+          in learning by building and improving through hands-on experience.
+        </p>
+      </div>
     </section>
 
     <section>
       <h2>Areas of Interest</h2>
-      <ul>
-        <li>Web Development</li>
-        <li>Full-Stack Development</li>
-        <li>Artificial Intelligence and Machine Learning</li>
-        <li>Computer Vision and Automation</li>
-        <li>Problem Solving and System Design</li>
-      </ul>
+      <div class="grid">
+        <div class="interest">Web Development</div>
+        <div class="interest">Full-Stack Systems</div>
+        <div class="interest">AI & Machine Learning</div>
+        <div class="interest">Computer Vision</div>
+        <div class="interest">System Design</div>
+      </div>
     </section>
 
     <footer>
