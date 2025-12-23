@@ -60,25 +60,55 @@
   }
 
   .dark {
-    --background: 250 25% 8%;
-    --foreground: 0 0% 95%;
-    --card: 250 22% 12%;
-    --card-foreground: 0 0% 95%;
-    --popover: 250 22% 12%;
-    --popover-foreground: 0 0% 95%;
-    --primary: 265 70% 65%;
-    --primary-foreground: 250 25% 8%;
-    --secondary: 280 55% 60%;
+    /* Cool dark purple theme */
+    --background: 260 30% 6%;
+    --foreground: 270 20% 95%;
+    
+    --card: 260 28% 10%;
+    --card-foreground: 270 20% 95%;
+    
+    --popover: 260 28% 10%;
+    --popover-foreground: 270 20% 95%;
+    
+    /* Vibrant purple primary */
+    --primary: 270 85% 65%;
+    --primary-foreground: 260 30% 6%;
+    
+    /* Electric violet secondary */
+    --secondary: 285 70% 60%;
     --secondary-foreground: 0 0% 100%;
-    --muted: 250 18% 18%;
-    --muted-foreground: 250 10% 55%;
-    --accent: 275 60% 70%;
-    --accent-foreground: 250 25% 8%;
+    
+    --muted: 260 25% 15%;
+    --muted-foreground: 260 15% 55%;
+    
+    /* Neon lavender accent */
+    --accent: 280 75% 70%;
+    --accent-foreground: 260 30% 6%;
+    
     --destructive: 0 70% 55%;
     --destructive-foreground: 0 0% 98%;
-    --border: 250 18% 22%;
-    --input: 250 18% 22%;
-    --ring: 265 70% 65%;
+    
+    --border: 260 25% 18%;
+    --input: 260 25% 18%;
+    --ring: 270 85% 65%;
+    
+    /* Dark theme extended palette */
+    --purple-glow: 270 85% 70%;
+    --violet-soft: 285 60% 65%;
+    --lavender: 280 50% 75%;
+    
+    /* Enhanced shadows for dark mode */
+    --shadow-soft: 0 4px 24px hsl(260 50% 5% / 0.5);
+    --shadow-glow: 0 0 60px hsl(270 85% 65% / 0.25);
+
+    --sidebar-background: 260 28% 10%;
+    --sidebar-foreground: 270 20% 95%;
+    --sidebar-primary: 270 85% 65%;
+    --sidebar-primary-foreground: 260 30% 6%;
+    --sidebar-accent: 260 25% 15%;
+    --sidebar-accent-foreground: 270 20% 95%;
+    --sidebar-border: 260 25% 18%;
+    --sidebar-ring: 270 85% 65%;
   }
 }
 

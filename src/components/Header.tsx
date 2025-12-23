@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Github, Linkedin, Mail } from 'lucide-react';
+import ThemeToggle from './ThemeToggle';
 
 const navItems = [
   { name: 'Home', href: '#home' },
@@ -12,7 +13,7 @@ const navItems = [
 
 const socialLinks = [
   { icon: Github, href: 'https://github.com/Madhur984', label: 'GitHub' },
-  { icon: Linkedin, href: 'https://www.linkedin.com/in/madhur-garg-5419b4244', label: 'LinkedIn' },
+  { icon: Linkedin, href: 'https://www.linkedin.com/in/madhur984', label: 'LinkedIn' },
   { icon: Mail, href: 'mailto:gmadhur908@gmail.com', label: 'Email' },
 ];
 
@@ -94,7 +95,7 @@ export default function Header() {
             ))}
           </nav>
 
-          {/* Social Links - Desktop */}
+          {/* Social Links & Theme Toggle - Desktop */}
           <div className="hidden md:flex items-center gap-2">
             {socialLinks.map((link) => (
               <a
@@ -108,6 +109,8 @@ export default function Header() {
                 <link.icon className="w-4 h-4" />
               </a>
             ))}
+            <div className="w-px h-6 bg-border mx-1" />
+            <ThemeToggle />
           </div>
 
           {/* Mobile Menu Button */}

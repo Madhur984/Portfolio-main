@@ -4,7 +4,7 @@ import { Mail, MapPin, Send, Github, Linkedin, Instagram, Copy, Check, Coffee, M
 
 const socialLinks = [
   { name: 'GitHub', href: 'https://github.com/Madhur984', icon: Github, emoji: '🐙' },
-  { name: 'LinkedIn', href: 'https://www.linkedin.com/in/madhur-garg-5419b4244', icon: Linkedin, emoji: '💼' },
+  { name: 'LinkedIn', href: 'https://www.linkedin.com/in/madhur984', icon: Linkedin, emoji: '💼' },
   { name: 'Instagram', href: 'https://www.instagram.com/madhur_g24', icon: Instagram, emoji: '📸' },
 ];
 

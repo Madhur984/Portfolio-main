@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
+import { motion } from 'framer-motion';
 
 const codeSnippets = [
   `def train_model(data):
@@ -66,6 +67,34 @@ for epoch in range(epochs):
     optimizer.step()`,
 ];
 
+// Hand-drawn style doodle paths
+const doodles = [
+  // Neural network nodes
+  { type: 'circles', positions: [[20, 15], [20, 25], [20, 35], [35, 20], [35, 30], [50, 25]] },
+  // Brain doodle
+  { type: 'emoji', content: '🧠', x: 85, y: 12 },
+  // Robot
+  { type: 'emoji', content: '🤖', x: 8, y: 45 },
+  // Chart/graph
+  { type: 'emoji', content: '📊', x: 92, y: 55 },
+  // Lightning bolt
+  { type: 'emoji', content: '⚡', x: 75, y: 80 },
+  // Gear
+  { type: 'emoji', content: '⚙️', x: 12, y: 78 },
+  // Code
+  { type: 'emoji', content: '💻', x: 88, y: 35 },
+  // Lightbulb
+  { type: 'emoji', content: '💡', x: 5, y: 20 },
+  // Python
+  { type: 'emoji', content: '🐍', x: 78, y: 92 },
+  // Rocket
+  { type: 'emoji', content: '🚀', x: 50, y: 8 },
+  // Star
+  { type: 'emoji', content: '✨', x: 30, y: 88 },
+  // Math
+  { type: 'emoji', content: '∑', x: 65, y: 75 },
+];
+
 interface CodeBlock {
   id: number;
   code: string;
@@ -105,7 +134,7 @@ export default function CodeBackground() {
           code: codeSnippets[i % codeSnippets.length],
           x,
           y,
-          opacity: Math.random() * 0.08 + 0.04,
+          opacity: Math.random() * 0.12 + 0.08, // Darker: 0.08-0.20
           scale: Math.random() * 0.3 + 0.7,
         });
       }
@@ -126,7 +155,148 @@ export default function CodeBackground() {
       <div className="absolute bottom-0 right-0 w-[500px] h-[500px] rounded-full bg-secondary/5 blur-3xl" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-accent/3 blur-3xl" />
       
-      {/* Code blocks */}
+      {/* Animated doodles */}
+      {doodles.map((doodle, index) => {
+        if (doodle.type === 'emoji') {
+          return (
+            <motion.div
+              key={`doodle-${index}`}
+              className="absolute text-2xl md:text-3xl select-none"
+              style={{
+                left: `${doodle.x}%`,
+                top: `${doodle.y}%`,
+                opacity: 0.15,
+              }}
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ 
+                opacity: 0.15, 
+                scale: 1,
+                y: [0, -8, 0],
+                rotate: [0, 5, -5, 0],
+              }}
+              transition={{
+                opacity: { duration: 0.5, delay: index * 0.1 },
+                scale: { duration: 0.5, delay: index * 0.1 },
+                y: { duration: 4 + index * 0.5, repeat: Infinity, ease: 'easeInOut' },
+                rotate: { duration: 6 + index * 0.3, repeat: Infinity, ease: 'easeInOut' },
+              }}
+            >
+              {doodle.content}
+            </motion.div>
+          );
+        }
+        
+        if (doodle.type === 'circles') {
+          return (
+            <svg
+              key={`doodle-${index}`}
+              className="absolute w-full h-full opacity-10"
+              style={{ pointerEvents: 'none' }}
+            >
+              {doodle.positions?.map((pos, i) => (
+                <motion.circle
+                  key={i}
+                  cx={`${pos[0]}%`}
+                  cy={`${pos[1]}%`}
+                  r="8"
+                  fill="none"
+                  stroke="hsl(var(--primary))"
+                  strokeWidth="1.5"
+                  strokeDasharray="4 2"
+                  initial={{ opacity: 0, scale: 0 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: i * 0.15 }}
+                />
+              ))}
+              {/* Connection lines for neural network */}
+              <motion.line
+                x1="20%" y1="15%" x2="35%" y2="20%"
+                stroke="hsl(var(--primary))"
+                strokeWidth="1"
+                strokeDasharray="3 3"
+                initial={{ pathLength: 0 }}
+                animate={{ pathLength: 1 }}
+                transition={{ duration: 1, delay: 0.5 }}
+              />
+              <motion.line
+                x1="20%" y1="25%" x2="35%" y2="20%"
+                stroke="hsl(var(--primary))"
+                strokeWidth="1"
+                strokeDasharray="3 3"
+                initial={{ pathLength: 0 }}
+                animate={{ pathLength: 1 }}
+                transition={{ duration: 1, delay: 0.6 }}
+              />
+              <motion.line
+                x1="20%" y1="25%" x2="35%" y2="30%"
+                stroke="hsl(var(--primary))"
+                strokeWidth="1"
+                strokeDasharray="3 3"
+                initial={{ pathLength: 0 }}
+                animate={{ pathLength: 1 }}
+                transition={{ duration: 1, delay: 0.7 }}
+              />
+              <motion.line
+                x1="20%" y1="35%" x2="35%" y2="30%"
+                stroke="hsl(var(--primary))"
+                strokeWidth="1"
+                strokeDasharray="3 3"
+                initial={{ pathLength: 0 }}
+                animate={{ pathLength: 1 }}
+                transition={{ duration: 1, delay: 0.8 }}
+              />
+              <motion.line
+                x1="35%" y1="20%" x2="50%" y2="25%"
+                stroke="hsl(var(--primary))"
+                strokeWidth="1"
+                strokeDasharray="3 3"
+                initial={{ pathLength: 0 }}
+                animate={{ pathLength: 1 }}
+                transition={{ duration: 1, delay: 0.9 }}
+              />
+              <motion.line
+                x1="35%" y1="30%" x2="50%" y2="25%"
+                stroke="hsl(var(--primary))"
+                strokeWidth="1"
+                strokeDasharray="3 3"
+                initial={{ pathLength: 0 }}
+                animate={{ pathLength: 1 }}
+                transition={{ duration: 1, delay: 1.0 }}
+              />
+            </svg>
+          );
+        }
+        
+        return null;
+      })}
+
+      {/* Hand-drawn style decorative elements */}
+      <svg className="absolute inset-0 w-full h-full opacity-10 pointer-events-none">
+        {/* Curvy arrow */}
+        <motion.path
+          d="M 60% 60% Q 65% 55%, 70% 58% T 80% 55%"
+          fill="none"
+          stroke="hsl(var(--primary))"
+          strokeWidth="2"
+          strokeLinecap="round"
+          initial={{ pathLength: 0 }}
+          animate={{ pathLength: 1 }}
+          transition={{ duration: 2, delay: 1 }}
+        />
+        {/* Squiggle */}
+        <motion.path
+          d="M 10% 60% Q 15% 55%, 20% 60% T 30% 55%"
+          fill="none"
+          stroke="hsl(var(--secondary))"
+          strokeWidth="2"
+          strokeLinecap="round"
+          initial={{ pathLength: 0 }}
+          animate={{ pathLength: 1 }}
+          transition={{ duration: 2, delay: 1.5 }}
+        />
+      </svg>
+      
+      {/* Code blocks - darker */}
       {codeBlocks.map((block) => (
         <pre
           key={block.id}
@@ -136,7 +306,7 @@ export default function CodeBackground() {
             top: `${block.y}%`,
             opacity: block.opacity,
             transform: `scale(${block.scale})`,
-            color: 'hsl(var(--primary))',
+            color: 'hsl(var(--foreground))',
           }}
         >
           {block.code}
