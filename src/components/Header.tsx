@@ -174,6 +174,8 @@ export default function Header() {
                     <link.icon className="w-5 h-5" />
                   </a>
                 ))}
+                <div className="w-px h-6 bg-border" />
+                <ThemeToggle />
               </div>
             </nav>
           </motion.div>
