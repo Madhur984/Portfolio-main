@@ -41,9 +41,9 @@ const timelineData = [
   },
   {
     year: '2023',
-    title: 'Started B.Tech in Computer Science',
+    title: 'Started B.Tech in Electronics and Communication',
     subtitle: 'Specialization in AI & Machine Learning',
-    description: 'Began my journey in Computer Science with a focus on Artificial Intelligence and Machine Learning at a top engineering college.',
+    description: 'Began my journey in Computer Science with a focus on Artificial Intelligence and Machine Learning beside college hustle',
     icon: GraduationCap,
     type: 'education',
     emoji: '🎓',
